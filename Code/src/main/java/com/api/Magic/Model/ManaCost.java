@@ -15,6 +15,6 @@ public class ManaCost {
     };
 
     public String getManaCostInfo(){
-        return ("Has cost: " + this.cost + " / and type: " + this.manaType);
+        return (this.cost + " - type: " + this.manaType);
     }
 }

@@ -19,6 +19,9 @@ public class CreatureCard extends Card{
         String infoName = this.getName();
 
         System.out.println("Card Info \nName: " + infoName +
-                                    "\nCardType: " + this.getType() + " " + this.creatureType);;
+                                    "\nCardType: " + this.getType() + " - " + this.creatureType +
+                                    "\nMana Cost: " + this.getManaCost().getManaCostInfo() +
+                                    "\nDescription: " + this.getDescription() +
+                                    "\nPower: " + this.power + " - Defense: " + this.defense);
     }
 }

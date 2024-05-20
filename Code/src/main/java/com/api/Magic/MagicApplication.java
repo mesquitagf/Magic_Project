@@ -10,11 +10,8 @@ public class MagicApplication {
 
 		//SpringApplication.run(MagicApplication.class, args);
 
-		//System.out.println("Test");
 		CreatureCard monsterDemon = new CreatureCard("Raphael, Fiendish Savior", CardType.CREATURE, CreatureType.DEMON,
 				new ManaCost(ManaType.BLACK, 4), "Test", "4", "4");
-
-		//System.out.println(monsterDemon.getManaCost().getManaCostInfo());
 
 		monsterDemon.getInfo();
 	}
