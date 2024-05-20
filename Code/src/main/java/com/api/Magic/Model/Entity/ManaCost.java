@@ -1,4 +1,6 @@
-package com.api.Magic.Model;
+package com.api.Magic.Model.Entity;
+
+import com.api.Magic.Model.Enum.ManaType;
 
 public class ManaCost {
     private ManaType manaType;

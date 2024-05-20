@@ -1,4 +1,7 @@
-package com.api.Magic.Model;
+package com.api.Magic.Model.Entity;
+
+import com.api.Magic.Model.Enum.CardType;
+import com.api.Magic.Model.Enum.CreatureType;
 
 public class CreatureCard extends Card{
     private CreatureType creatureType;

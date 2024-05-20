@@ -1,4 +1,4 @@
-package com.api.Magic.Model;
+package com.api.Magic.Model.Enum;
 
 public enum CreatureType {
     BEAST,

@@ -1,7 +1,10 @@
 package com.api.Magic;
 
-import com.api.Magic.Model.*;
-import org.springframework.boot.SpringApplication;
+import com.api.Magic.Model.Entity.CreatureCard;
+import com.api.Magic.Model.Entity.ManaCost;
+import com.api.Magic.Model.Enum.CardType;
+import com.api.Magic.Model.Enum.CreatureType;
+import com.api.Magic.Model.Enum.ManaType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MagicApplication {
