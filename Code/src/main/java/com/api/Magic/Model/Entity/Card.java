@@ -1,14 +1,17 @@
 package com.api.Magic.Model.Entity;
 
-import com.api.Magic.Model.Enum.CardType;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
+@Document("Card")
 public class Card {
     private String name;
-    private ManaCost manaCost;
-    private CardType type;
+    private List<ManaCost> manaCost;
+    private String type;
     private String description;
 
-    public Card(String name, CardType type, ManaCost manaCost, String description) {
+    public Card(String name, List<ManaCost> manaCost, String type, String description) {
         this.name = name;
         this.manaCost = manaCost;
         this.type = type;
@@ -23,19 +26,19 @@ public class Card {
         this.name = name;
     }
 
-    public ManaCost getManaCost() {
+    public List<ManaCost> getManaCost() {
         return manaCost;
     }
 
-    public void setManaCost(ManaCost manaCost) {
+    public void setManaCost(List<ManaCost> manaCost) {
         this.manaCost = manaCost;
     }
 
-    public CardType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(CardType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
