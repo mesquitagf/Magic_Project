@@ -1,7 +1,8 @@
 package com.api.Magic.Controller;
 
+import com.api.Magic.Business.ManaTypeBusiness;
 import com.api.Magic.Model.Entity.ManaType;
-import com.api.Magic.Repository.ManaTypeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,14 +14,11 @@ import java.util.List;
 @RequestMapping("/manatypes")
 public class ManaTypeController {
 
-    private final ManaTypeRepository manaTypeRepository;
-
-    public ManaTypeController(ManaTypeRepository manaTypeRepository) {
-        this.manaTypeRepository = manaTypeRepository;
-    }
+    @Autowired
+    ManaTypeBusiness manaTypeBusiness;
 
     @GetMapping
     public ResponseEntity<List<ManaType>> findAll(){
-        return ResponseEntity.ok(this.manaTypeRepository.findAll());
+        return manaTypeBusiness.findAll();
     }
 }
