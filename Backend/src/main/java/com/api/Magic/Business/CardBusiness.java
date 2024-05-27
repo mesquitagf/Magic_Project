@@ -1,5 +1,6 @@
 package com.api.Magic.Business;
 
+import com.api.Magic.Dto.CardDTO;
 import com.api.Magic.Exception.BusinessException;
 import com.api.Magic.Model.Entity.Card;
 import com.api.Magic.Service.CardService;
@@ -10,24 +11,15 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("CardBusiness")
+@Component
 public class CardBusiness {
 
     @Autowired
     CardService cardService;
 
-    public void createCard(Card cardRequest) {
-        try {
-            var validateRequest = validateCreateCardRequest(cardRequest);
-
-            if (validateRequest == null){
-                cardService.createCard(cardRequest);
-            } else {
-                throw new BusinessException(validateRequest);
-            }
-        } catch (Exception e){
-            throw new BusinessException("Erro ao inserir novo Card!", e);
-        }
+    public String createCard(CardDTO cardRequestDTO) {
+        validateCreateCardRequest(cardRequestDTO);
+        return cardService.createCard(cardRequestDTO);
     }
 
     public ResponseEntity<List<Card>> findAll(){
@@ -46,15 +38,11 @@ public class CardBusiness {
         }
     }
 
-    private final String validateCreateCardRequest(Card cardRequest){
-        var errorsList = new ArrayList<>();
-
-        if (cardRequest.getName() == null){
-            errorsList.add("Name null");
+    private void validateCreateCardRequest(CardDTO cardRequestDTO){
+        if (cardRequestDTO.getName().isEmpty()){
+            throw new BusinessException("Name is null!");
+        } else if(cardRequestDTO.getType().isEmpty()){
+            throw new BusinessException("Type is null!");
         }
-        if(cardRequest.getType() == null){
-            errorsList.add("Type null");
-        }
-        return errorsList.toString();
     }
 }

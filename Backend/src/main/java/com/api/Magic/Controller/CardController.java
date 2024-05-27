@@ -1,8 +1,10 @@
 package com.api.Magic.Controller;
 
 import com.api.Magic.Business.CardBusiness;
+import com.api.Magic.Dto.CardDTO;
 import com.api.Magic.Model.Entity.Card;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,12 +17,13 @@ public class CardController {
     @Autowired
     CardBusiness cardBusiness;
 
-    @PostMapping("/createCard")
-    public void createCard(@RequestBody Card cardRequest){
-        cardBusiness.createCard(cardRequest);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public String createCard(@RequestBody CardDTO cardRequestDTO){
+        return cardBusiness.createCard(cardRequestDTO);
     }
 
-    @GetMapping("/getAllCard")
+    @GetMapping("/getAllCards")
     public ResponseEntity<List<Card>> findAll(){
         return this.cardBusiness.findAll();
     }

@@ -1,52 +1,27 @@
 package com.api.Magic.Model.Entity;
 
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
 @Document("Card")
+@Data
+@Builder
 public class Card {
+    @Id
+    private String id;
+
+    @Field(name = "name")
     private String name;
+
     private List<ManaCost> manaCost;
+
+    @Field(name = "type")
     private String type;
+
     private String description;
-
-    public Card(String name, List<ManaCost> manaCost, String type, String description) {
-        this.name = name;
-        this.manaCost = manaCost;
-        this.type = type;
-        this.description = description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<ManaCost> getManaCost() {
-        return manaCost;
-    }
-
-    public void setManaCost(List<ManaCost> manaCost) {
-        this.manaCost = manaCost;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

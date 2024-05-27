@@ -1,38 +1,19 @@
 package com.api.Magic.Model.Entity;
 
 import jakarta.persistence.Id;
-import org.bson.types.ObjectId;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
-import java.util.Objects;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document("ManaType")
+@Data
+@Builder
 public class ManaType {
 
     @Id
-    private ObjectId id;
+    private String id;
 
+    @Field(name = "manaType")
     private String manaType;
-
-    public ManaType(ObjectId id, String manaType) {
-        this.id = id;
-        this.manaType = manaType;
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
-
-    public String getManaType() {
-        return manaType;
-    }
-
-    public void setManaType(String manaType) {
-        this.manaType = manaType;
-    }
 }
