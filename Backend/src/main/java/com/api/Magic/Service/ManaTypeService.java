@@ -31,7 +31,18 @@ public class ManaTypeService {
         }
     }
 
-    public ResponseEntity<List<ManaType>> findAll(){
+    public ResponseEntity<List<ManaType>> findAllManaType(){
         return ResponseEntity.ok(this.manaTypeRepository.findAll());
     }
+
+    public String deleteManaType(String id){
+        try {
+            manaTypeRepository.deleteById(id);
+
+            return "ManaType deleted successfully! ID:" + id;
+        } catch (Exception e){
+            throw new BusinessException("Error deleting ManaType!", e);
+        }
+    }
+
 }

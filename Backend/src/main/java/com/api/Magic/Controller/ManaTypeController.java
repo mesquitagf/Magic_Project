@@ -24,7 +24,14 @@ public class ManaTypeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ManaType>> findAll(){
-        return manaTypeBusiness.findAll();
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<ManaType>> findAllManaType(){
+        return manaTypeBusiness.findAllManaType();
+    }
+
+    @DeleteMapping("/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteManaType(@RequestParam String id){
+        return manaTypeBusiness.deleteManaType(id);
     }
 }

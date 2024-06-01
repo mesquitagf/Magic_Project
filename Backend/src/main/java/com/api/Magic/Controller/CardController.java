@@ -24,11 +24,13 @@ public class CardController {
     }
 
     @GetMapping("/getAllCards")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Card>> findAll(){
         return this.cardBusiness.findAll();
     }
 
     @GetMapping("/getCardsByType")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Card>> findAllByType(@RequestParam ("type") String type){
         return this.cardBusiness.findAllByType(type);
     }

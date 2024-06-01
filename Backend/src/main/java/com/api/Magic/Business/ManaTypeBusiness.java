@@ -21,8 +21,8 @@ public class ManaTypeBusiness {
         return manaTypeService.createManaType(manaTypeRequestDTO);
     }
 
-    public ResponseEntity<List<ManaType>> findAll(){
-        return manaTypeService.findAll();
+    public ResponseEntity<List<ManaType>> findAllManaType(){
+        return manaTypeService.findAllManaType();
     }
 
     private void validateManaTypeField(ManaTypeDTO manaTypeDTO){
@@ -30,4 +30,16 @@ public class ManaTypeBusiness {
             throw new BusinessException("ManaType is null!");
         }
     }
+
+    public String deleteManaType(String id) {
+        validateIdField(id);
+        return manaTypeService.deleteManaType(id);
+    }
+
+    private void validateIdField(String id){
+        if (id.isEmpty()){
+            throw new BusinessException("ID is null!");
+        }
+    }
+
 }
