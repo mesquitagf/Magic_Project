@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.mongodb.lang.NonNull;
+
 import java.util.List;
 
 @Document("Card")
@@ -13,6 +15,7 @@ import java.util.List;
 @Builder
 public class Card {
     @Id
+    @NonNull
     private String id;
 
     @Field(name = "name")

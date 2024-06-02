@@ -1,6 +1,5 @@
 package com.api.Magic.Model.Entity;
 
-import java.util.List;
 
 public class ManaCost {
     private String manaType;

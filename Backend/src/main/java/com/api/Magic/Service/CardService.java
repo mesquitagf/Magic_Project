@@ -38,4 +38,14 @@ public class CardService {
     public ResponseEntity<List<Card>> findAllByType(String type) {
         return ResponseEntity.ok(this.cardRepository.findAllByType(type));
     }
+
+    public String deleteCardById(String id) {
+        this.cardRepository.deleteById(id);
+        return "Card deleted successfully! ID: " + id;
+    }
+
+    public ResponseEntity<Card> findById(String id) {
+        return null; // TODO
+    }
+
 }
