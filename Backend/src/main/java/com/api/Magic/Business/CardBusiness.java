@@ -2,7 +2,6 @@ package com.api.Magic.Business;
 
 import com.api.Magic.Dto.CardDTO;
 import com.api.Magic.Exception.BusinessException;
-import com.api.Magic.Model.Entity.Card;
 import com.api.Magic.Service.CardService;
 
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -28,16 +26,16 @@ public class CardBusiness {
         return cardService.createCard(cardRequestDTO);
     }
 
-    public ResponseEntity<List<Card>> findAll(){
+    public CardDTO findById(String id) throws BusinessException {
+        businessException.validateIdField(id);
+        return this.cardService.findById(id);
+    }
+
+    public ResponseEntity<List<CardDTO>> findAll(){
         return this.cardService.findAll();
     }
 
-    public String deleteCardById(String id) throws BusinessException{
-        businessException.validateIdField(id);
-        return this.cardService.deleteCardById(id);
-    }
-
-    public ResponseEntity<List<Card>> findAllByType(String type) {
+    public ResponseEntity<List<CardDTO>> findAllByType(String type) {
         try{
             validateTypeEmpty(type);
             var cardList = this.cardService.findAllByType(type);
@@ -48,9 +46,9 @@ public class CardBusiness {
         }
     }
 
-    public Optional<Card> findById(String id) throws BusinessException {
+    public String deleteCardById(String id) throws BusinessException{
         businessException.validateIdField(id);
-        return this.cardService.findById(id);
+        return this.cardService.deleteCardById(id);
     }
 
     private void validateCreateCardRequest(CardDTO cardRequestDTO){
@@ -62,12 +60,12 @@ public class CardBusiness {
     }
 
     private void validateTypeEmpty(String type) {
-        if (type.isEmpty() || type == null){
+        if (type.isEmpty()){
             throw new BusinessException("Type null");
         } 
     }
 
-    private void validateCardNotFoundByType(ResponseEntity<List<Card>> response) {
+    private void validateCardNotFoundByType(ResponseEntity<List<CardDTO>> response) {
         if(response.getBody().isEmpty()) {
             throw new BusinessException("No Cards where found with this type");
         }

@@ -3,7 +3,6 @@ package com.api.Magic.Service;
 import com.api.Magic.Converter.CardConverter;
 import com.api.Magic.Dto.CardDTO;
 import com.api.Magic.Exception.BusinessException;
-import com.api.Magic.Model.Entity.Card;
 import com.api.Magic.Repository.CardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +23,7 @@ public class CardService {
 
     public String createCard(CardDTO cardRequestDTO) {
         try {
+            cardRequestDTO.setId(UUID.randomUUID().toString());
             var cardRequest = cardConverter.toEntity(cardRequestDTO);
             cardRepository.save(cardRequest);
             return "Card created successfully! ID: " + cardRequest.getId();
@@ -32,21 +32,28 @@ public class CardService {
         }
     }
 
-    public ResponseEntity<List<Card>> findAll(){
-        return ResponseEntity.ok(this.cardRepository.findAll());
+    public CardDTO findById(String id) {
+        var cardResponse = this.cardRepository.findById(id);
+        if (cardResponse.isPresent()){
+            return cardConverter.toDTO(cardResponse.get());
+        } else {
+            throw new BusinessException("Error searching Card by ID: " + id);
+        }
     }
 
-    public ResponseEntity<List<Card>> findAllByType(String type) {
-        return ResponseEntity.ok(this.cardRepository.findAllByType(type));
+    public ResponseEntity<List<CardDTO>> findAll(){
+        var cardListResponse = cardConverter.convertListToDTO(this.cardRepository.findAll());
+        return ResponseEntity.ok(cardListResponse);
+    }
+
+    public ResponseEntity<List<CardDTO>> findAllByType(String type) {
+        var cardListResponse = cardConverter.convertListToDTO(this.cardRepository.findAllByTypeIgnoreCase(type));
+        return ResponseEntity.ok(cardListResponse);
     }
 
     public String deleteCardById(String id) {
         this.cardRepository.deleteById(id);
         return "Card deleted successfully! ID: " + id;
-    }
-
-    public Optional<Card> findById(String id) {
-        return this.cardRepository.findById(id);
     }
 
 }

@@ -2,14 +2,12 @@ package com.api.Magic.Controller;
 
 import com.api.Magic.Business.CardBusiness;
 import com.api.Magic.Dto.CardDTO;
-import com.api.Magic.Model.Entity.Card;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -27,20 +25,20 @@ public class CardController {
 
     @GetMapping("/getById")
     @ResponseStatus(HttpStatus.OK)
-    public Optional<Card> findById(@RequestParam String id) {
+    public CardDTO findById(@RequestParam String id) {
         return this.cardBusiness.findById(id);
     }
     
 
     @GetMapping("/getAllCards")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<Card>> findAll(){
+    public ResponseEntity<List<CardDTO>> findAll(){
         return this.cardBusiness.findAll();
     }
 
     @GetMapping("/getCardsByType")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<Card>> findAllByType(@RequestParam ("type") String type){
+    public ResponseEntity<List<CardDTO>> findAllByType(@RequestParam ("type") String type){
         return this.cardBusiness.findAllByType(type);
     }
 

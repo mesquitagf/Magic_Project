@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface CardRepository extends MongoRepository<Card, String> {
 
-    List<Card> findAllByType(String type);
+    List<Card> findAllByTypeIgnoreCase(String type);
 }
