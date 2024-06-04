@@ -9,8 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import java.util.Optional;
 
 
 @RestController
@@ -28,7 +27,7 @@ public class CardController {
 
     @GetMapping("/getById")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Card> findById(@RequestParam String id) {
+    public Optional<Card> findById(@RequestParam String id) {
         return this.cardBusiness.findById(id);
     }
     

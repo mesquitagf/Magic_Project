@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -47,7 +48,8 @@ public class CardBusiness {
         }
     }
 
-    public ResponseEntity<Card> findById(String id) {
+    public Optional<Card> findById(String id) throws BusinessException {
+        businessException.validateIdField(id);
         return this.cardService.findById(id);
     }
 
@@ -70,5 +72,6 @@ public class CardBusiness {
             throw new BusinessException("No Cards where found with this type");
         }
     }
+
 
 }

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,8 +45,8 @@ public class CardService {
         return "Card deleted successfully! ID: " + id;
     }
 
-    public ResponseEntity<Card> findById(String id) {
-        return null; // TODO
+    public Optional<Card> findById(String id) {
+        return this.cardRepository.findById(id);
     }
 
 }
