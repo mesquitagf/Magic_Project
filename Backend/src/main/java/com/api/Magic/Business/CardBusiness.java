@@ -22,13 +22,24 @@ public class CardBusiness {
     private final BusinessException businessException;
 
     public String createCard(CardDTO cardRequestDTO) {
-        validateCreateCardRequest(cardRequestDTO);
+        validateCardRequest(cardRequestDTO);
         return cardService.createCard(cardRequestDTO);
     }
 
     public CardDTO findById(String id) throws BusinessException {
         businessException.validateIdField(id);
         return this.cardService.findById(id);
+    }
+
+    public String updateCard(String id, CardDTO cardRequestDTO) {
+        var existingCard = validateExistingCard(id);
+        validateCardRequest(cardRequestDTO);
+        return this.cardService.updateCard(cardRequestDTO, existingCard);
+    }
+
+    public String deleteCardById(String id) throws BusinessException{
+        businessException.validateIdField(id);
+        return this.cardService.deleteCardById(id);
     }
 
     public ResponseEntity<List<CardDTO>> findAll(){
@@ -46,16 +57,19 @@ public class CardBusiness {
         }
     }
 
-    public String deleteCardById(String id) throws BusinessException{
-        businessException.validateIdField(id);
-        return this.cardService.deleteCardById(id);
-    }
-
-    private void validateCreateCardRequest(CardDTO cardRequestDTO){
+    private void validateCardRequest(CardDTO cardRequestDTO){
         if (cardRequestDTO.getName().isEmpty()){
             throw new BusinessException("Name is null!");
         } else if(cardRequestDTO.getType().isEmpty()){
             throw new BusinessException("Type is null!");
+        }
+    }
+
+    private CardDTO validateExistingCard(String cardID) {
+        try {
+            return this.cardService.findById(cardID);
+        } catch (Exception e){
+            throw new BusinessException("Card with ID: " + cardID + ", not found to be updated!");
         }
     }
 
@@ -70,6 +84,4 @@ public class CardBusiness {
             throw new BusinessException("No Cards where found with this type");
         }
     }
-
-
 }

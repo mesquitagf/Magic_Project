@@ -17,7 +17,7 @@ public class CardController {
     @Autowired
     CardBusiness cardBusiness;
     
-    @PostMapping
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public String createCard(@RequestBody CardDTO cardRequestDTO){
         return cardBusiness.createCard(cardRequestDTO);
@@ -28,7 +28,19 @@ public class CardController {
     public CardDTO findById(@RequestParam String id) {
         return this.cardBusiness.findById(id);
     }
-    
+
+    @PostMapping("/update")
+    @ResponseStatus(HttpStatus.OK)
+    public String updateCard(@RequestParam String id, @RequestBody CardDTO cardRequestDTO){
+        return cardBusiness.updateCard(id, cardRequestDTO);
+    };
+
+    @DeleteMapping("/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteCardById(@RequestParam String id) {
+        return this.cardBusiness.deleteCardById(id);
+
+    }
 
     @GetMapping("/getAllCards")
     @ResponseStatus(HttpStatus.OK)
@@ -40,13 +52,6 @@ public class CardController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<CardDTO>> findAllByType(@RequestParam ("type") String type){
         return this.cardBusiness.findAllByType(type);
-    }
-
-    @DeleteMapping("/deleteCard") 
-    @ResponseStatus(HttpStatus.OK)
-    public String deleteCardById(@RequestParam String id) {
-        return this.cardBusiness.deleteCardById(id);
-
     }
 
 }

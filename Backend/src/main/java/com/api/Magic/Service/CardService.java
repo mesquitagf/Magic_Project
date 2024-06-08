@@ -41,6 +41,26 @@ public class CardService {
         }
     }
 
+    public String updateCard(CardDTO cardRequestDTO, CardDTO existingCard) {
+        try {
+            existingCard.setName(cardRequestDTO.getName());
+            existingCard.setManaCost(cardRequestDTO.getManaCost());
+            existingCard.setType(cardRequestDTO.getType());
+            existingCard.setDescription(cardRequestDTO.getDescription());
+
+            var cardRequest = cardConverter.toEntity(existingCard);
+            cardRepository.save(cardRequest);
+            return "Card updated successfully! ID: " + cardRequest.getId();
+        } catch (Exception e){
+            throw new BusinessException("Error updating Card!", e);
+        }
+    }
+
+    public String deleteCardById(String id) {
+        this.cardRepository.deleteById(id);
+        return "Card deleted successfully! ID: " + id;
+    }
+
     public ResponseEntity<List<CardDTO>> findAll(){
         var cardListResponse = cardConverter.convertListToDTO(this.cardRepository.findAll());
         return ResponseEntity.ok(cardListResponse);
@@ -49,11 +69,6 @@ public class CardService {
     public ResponseEntity<List<CardDTO>> findAllByType(String type) {
         var cardListResponse = cardConverter.convertListToDTO(this.cardRepository.findAllByTypeIgnoreCase(type));
         return ResponseEntity.ok(cardListResponse);
-    }
-
-    public String deleteCardById(String id) {
-        this.cardRepository.deleteById(id);
-        return "Card deleted successfully! ID: " + id;
     }
 
 }
