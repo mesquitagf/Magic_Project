@@ -1,15 +1,16 @@
 package com.api.Magic.Service;
 
-import com.api.Magic.Converter.CardConverter;
-import com.api.Magic.Dto.CardDTO;
 import com.api.Magic.Exception.BusinessException;
+import com.api.Magic.Model.Entity.Card;
 import com.api.Magic.Repository.CardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -19,56 +20,34 @@ public class CardService {
     @Autowired
     CardRepository cardRepository;
 
-    private final CardConverter cardConverter;
-
-    public String createCard(CardDTO cardRequestDTO) {
-        try {
-            cardRequestDTO.setId(UUID.randomUUID().toString());
-            var cardRequest = cardConverter.toEntity(cardRequestDTO);
-            cardRepository.save(cardRequest);
-            return "Card created successfully! ID: " + cardRequest.getId();
-        } catch (Exception e){
-            throw new BusinessException("Error creating new Card!", e);
-        }
+    public Card createCard(Card cardRequest) {
+        cardRequest.setId(UUID.randomUUID().toString());
+        return cardRepository.save(cardRequest);
     }
 
-    public CardDTO findById(String id) {
-        var cardResponse = this.cardRepository.findById(id);
-        if (cardResponse.isPresent()){
-            return cardConverter.toDTO(cardResponse.get());
-        } else {
-            throw new BusinessException("Error searching Card by ID: " + id);
-        }
+    public Optional<Card> findById(String id) {
+        return this.cardRepository.findById(id);
     }
 
-    public String updateCard(CardDTO cardRequestDTO, CardDTO existingCard) {
-        try {
-            existingCard.setName(cardRequestDTO.getName());
-            existingCard.setManaCost(cardRequestDTO.getManaCost());
-            existingCard.setType(cardRequestDTO.getType());
-            existingCard.setDescription(cardRequestDTO.getDescription());
-
-            var cardRequest = cardConverter.toEntity(existingCard);
-            cardRepository.save(cardRequest);
-            return "Card updated successfully! ID: " + cardRequest.getId();
-        } catch (Exception e){
-            throw new BusinessException("Error updating Card!", e);
-        }
+    public Card updateCard(String id, Card cardRequest) {
+        var existingCard = this.cardRepository.findById(id).orElseThrow(() -> new BusinessException("Card not found!"));
+        BeanUtils.copyProperties(cardRequest, existingCard);
+        existingCard.setId(id);
+        return cardRepository.save(existingCard);
     }
 
     public String deleteCardById(String id) {
-        this.cardRepository.deleteById(id);
+        var existingCard = this.cardRepository.findById(id).orElseThrow(() -> new BusinessException("Card not found!"));
+        this.cardRepository.deleteById(existingCard.getId());
         return "Card deleted successfully! ID: " + id;
     }
 
-    public ResponseEntity<List<CardDTO>> findAll(){
-        var cardListResponse = cardConverter.convertListToDTO(this.cardRepository.findAll());
-        return ResponseEntity.ok(cardListResponse);
+    public Page<Card> findAll(Pageable pageable) {
+        return this.cardRepository.findAll(pageable);
     }
 
-    public ResponseEntity<List<CardDTO>> findAllByType(String type) {
-        var cardListResponse = cardConverter.convertListToDTO(this.cardRepository.findAllByTypeIgnoreCase(type));
-        return ResponseEntity.ok(cardListResponse);
+    public Page<Card> findAllByType(String type, Pageable pageable) {
+        return this.cardRepository.findAllByTypeIgnoreCase(type, pageable);
     }
 
 }

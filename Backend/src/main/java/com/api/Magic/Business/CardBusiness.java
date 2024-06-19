@@ -1,16 +1,17 @@
 package com.api.Magic.Business;
 
-import com.api.Magic.Dto.CardDTO;
 import com.api.Magic.Exception.BusinessException;
+import com.api.Magic.Model.Entity.Card;
 import com.api.Magic.Service.CardService;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -21,67 +22,51 @@ public class CardBusiness {
 
     private final BusinessException businessException;
 
-    public String createCard(CardDTO cardRequestDTO) {
-        validateCardRequest(cardRequestDTO);
-        return cardService.createCard(cardRequestDTO);
+    public Card createCard(Card cardRequest) {
+        try {
+            return cardService.createCard(cardRequest);
+        } catch (Exception e){
+            throw new BusinessException("Error creating Card!", e);
+        }
     }
 
-    public CardDTO findById(String id) throws BusinessException {
-        businessException.validateIdField(id);
-        return this.cardService.findById(id);
+    public Optional<Card> findById(String id) throws BusinessException {
+        try {
+            return this.cardService.findById(id);
+        } catch (Exception e){
+            throw new BusinessException("Error finding Card by ID: " + id, e);
+        }
     }
 
-    public String updateCard(String id, CardDTO cardRequestDTO) {
-        var existingCard = validateExistingCard(id);
-        validateCardRequest(cardRequestDTO);
-        return this.cardService.updateCard(cardRequestDTO, existingCard);
+    public Card updateCard(String id, Card cardRequest) {
+        try {
+            return this.cardService.updateCard(id, cardRequest);
+        } catch (Exception e){
+            throw new BusinessException("Error updating Card by ID: " + id, e);
+        }
     }
 
     public String deleteCardById(String id) throws BusinessException{
-        businessException.validateIdField(id);
-        return this.cardService.deleteCardById(id);
+        try {
+            return this.cardService.deleteCardById(id);
+        } catch (Exception e){
+            throw new BusinessException("Error deleting Card by ID: " + id, e);
+        }
     }
 
-    public ResponseEntity<List<CardDTO>> findAll(){
-        return this.cardService.findAll();
+    public Page<Card> findAll(Pageable pageable){
+        try {
+            return this.cardService.findAll(pageable);
+        } catch (Exception e){
+            throw new BusinessException("Error finding Cards!", e);
+        }
     }
 
-    public ResponseEntity<List<CardDTO>> findAllByType(String type) {
+    public Page<Card> findAllByType(String type, Pageable pageable) {
         try{
-            validateTypeEmpty(type);
-            var cardList = this.cardService.findAllByType(type);
-            validateCardNotFoundByType(cardList);
-            return cardList;
+            return this.cardService.findAllByType(type, pageable);
         } catch (Exception e){
             throw new BusinessException("Error searching Card by type!", e);
-        }
-    }
-
-    private void validateCardRequest(CardDTO cardRequestDTO){
-        if (cardRequestDTO.getName().isEmpty()){
-            throw new BusinessException("Name is null!");
-        } else if(cardRequestDTO.getType().isEmpty()){
-            throw new BusinessException("Type is null!");
-        }
-    }
-
-    private CardDTO validateExistingCard(String cardID) {
-        try {
-            return this.cardService.findById(cardID);
-        } catch (Exception e){
-            throw new BusinessException("Card with ID: " + cardID + ", not found to be updated!");
-        }
-    }
-
-    private void validateTypeEmpty(String type) {
-        if (type.isEmpty()){
-            throw new BusinessException("Type null");
-        } 
-    }
-
-    private void validateCardNotFoundByType(ResponseEntity<List<CardDTO>> response) {
-        if(response.getBody().isEmpty()) {
-            throw new BusinessException("No Cards where found with this type");
         }
     }
 }

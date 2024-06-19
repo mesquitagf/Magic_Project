@@ -1,12 +1,20 @@
 package com.api.Magic.Dto;
 
-import lombok.Builder;
+import com.api.Magic.Model.Entity.ManaType;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
 @Data
-@Builder
 public class ManaTypeDTO {
 
-    private String id;
+    @NotBlank
     private String manaType;
+
+    public ManaType toEntity(ManaTypeDTO manaTypeDTO){
+        var manaType = new ManaType();
+        BeanUtils.copyProperties(manaTypeDTO, manaType);
+        return manaType;
+    }
+
 }
